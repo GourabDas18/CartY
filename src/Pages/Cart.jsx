@@ -4,7 +4,7 @@ import { addMenProduct, addToCart, addToOrder, addWomenProduct } from "../redux/
 import { doc, getDoc, getDocs, updateDoc,collection } from 'firebase/firestore';
 import { addUser } from '../redux/storeSlice';
 import { auth, db } from "../firebase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { store } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
@@ -23,8 +23,9 @@ const Cart = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [cartItem, setCartItem] = useState([]);
     const [billDetail, setbillDetail] = useState(false);
-    const user = useSelector(state => state.storeSlice.user);
+    const user = store.getState().storeSlice.user;
     const [Razorpay] = useRazorpay();
+    const navigate = useNavigate();
     const bill = useRef();
     const userAuthcheckingDone = store.getState().storeSlice.checked;
     const men_product = store.getState().storeSlice.men;
@@ -50,7 +51,7 @@ const Cart = () => {
                     }
                     setTotalcartItems(cartItem.length);
                 } else {
-                    console.log("no user")
+                   
                 }
             })
         } else {
@@ -161,8 +162,10 @@ const Cart = () => {
     }
 
     const trypay = async () => {
+        console.log(user)
         if (user[0].city === "" || user[0].pincode === "" || user[0].country === "" || user[0].state === "") {
-            alert("Please fill your details in user page.")
+            alert("Please fill your details in user page.");
+            navigate("/user")
         } else {
             billDetails("close");
             const options = {

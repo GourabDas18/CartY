@@ -8,14 +8,27 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Component/Footer";
 import Header from "../Component/Header";
 import { store } from "../redux/store";
+import Alert from "../Component/Alert";
 const Signup =()=>{
 
     const[eye,setEye]= useState(false);
     const[password,setPassword]=useState("");
     const[mail,setMail]=useState("");
     const[name,setName]=useState("");
+    const[alert,setAlert]=useState(false);
+    const[formSubmit,setFormSubmit]=useState(false);
+    const[alertData,setAlertData]=useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const alertBoxSet=(details,callBack)=>{
+        setAlertData(details);
+        setAlert(true);
+        setTimeout(()=>{
+            setAlert(false);
+            setAlertData(null);
+            callBack();
+        },details.time||1200)
+    }
     const signin_method=()=>{
         if(password!=="" && mail!=="" && name!=="" && password.length>6){
             try {
@@ -38,7 +51,6 @@ const Signup =()=>{
                     orders:[]
                         };
                         setDoc(doc(db,"users",uid),user_data).then(val=>{
-                            alert("Sign In succesfull");
                             dispatch(addUser([{
                                 uid:uid,
                                 email:mail,
@@ -52,7 +64,7 @@ const Signup =()=>{
                                 cart:[],
                                 wishlist:[]
                             }]));
-                            navigate("/");
+                            alertBoxSet({data:"Login successfuly",font:"text-slate-100" ,color:"bg-green-500"},()=>{navigate("/")})
                         });
                     }
                 })
@@ -60,16 +72,18 @@ const Signup =()=>{
                 console.log(error)
             }    
         }else if(password !==""){
-            alert("Please enter password .")
+            setFormSubmit(false);
+            alertBoxSet({data:"Please enter password",font:"text-slate-100" ,color:"bg-red-600",time:2200},()=>{return false})
         }
         else if(mail !==""){
-            alert("Please enter mail .")
+            setFormSubmit(false);
+            alertBoxSet({data:"Please enter mail",font:"text-slate-100" ,color:"bg-red-600",time:2200},()=>{return false})
         }
         else if(name !==""){
-            alert("Please enter name .")
+            alertBoxSet({data:"Please enter name",font:"text-slate-100" ,color:"bg-red-600",time:2200},()=>{return false})
         }
         else if(password.length<6){
-            alert("Password length cannot be less than 5 .")
+            alertBoxSet({data:"Password length cannot be less than 5",font:"text-slate-100" ,color:"bg-red-600",time:2200},()=>{return false})
         }
     }
 
@@ -93,7 +107,6 @@ const Signup =()=>{
                     orders:[]
             };
             setDoc(doc(db,"users",uid),user_data).then(val=>{
-                alert("Sign In succesfull");
                 dispatch(addUser([{
                     uid:uid,
                     email:user.user.email,
@@ -107,13 +120,14 @@ const Signup =()=>{
                     cart:[],
                     wishlist:[]
                 }]));
-                navigate("/");
+                alertBoxSet({data:"Login successfuly",font:"text-slate-100" ,color:"bg-green-500"},()=>{navigate("/")})
         });
         
         })
     }
 
     return <div className="relative min-h-screen pb-64">
+        {alert? <Alert message={alertData.data} font={alertData.font} color={alertData.color} /> : ""}
         <Header />
     <div className="flex flex-col justify-center items-center bg-slate-50 min-h-[80vh] mt-5 w-full">
     <form className="p-10 bg-white shadow-sm w-[27rem] h-max flex flex-col gap-3 py-10" onSubmit={(e)=>e.preventDefault()}>
@@ -132,7 +146,10 @@ const Signup =()=>{
             <Link to={"/signin"}>Already have an account ?</Link>
             
         </span>
-        <button className="text-center p-1 py-2 border-2 bg-slate-700 text-slate-300 mx-1 rounded-md hover:shadow-md" onClick={()=>{signin_method()}}>Submit</button>
+        {formSubmit
+        ?<button className="text-center p-1 py-2 border-2 text-slate-700 bg-slate-300 mx-1 rounded-md hover:shadow-md" >Please Wait ...</button>
+        : <button className="text-center p-1 py-2 border-2 bg-slate-700 text-slate-300 mx-1 rounded-md hover:shadow-md" onClick={()=>{signin_method()}}>Submit</button>
+        }
         <span className="flex flex-row justify-evenly items-center my-5">
             <span className="block w-1/6 h-[1px] bg-slate-400"></span>
             <span>Or continue with</span>

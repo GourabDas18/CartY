@@ -60,14 +60,14 @@ const Women=()=>{
                     : <></>
             }
             <FilterW products={women_product} setkurtas={setkurtas} setjacket={setjacket} setkurtasCollection={setkurtasCollection} setjacketCollection={setjacketCollection} kurtasCollection={kurtasCollection} jacketCollection={jacketCollection}/>
-            <div className="w-full relative">
+            <div className="w-full relative" id="kutasCollectionDiv">
                 <div className="flex min-w-full justify-between  overflow-y-hidden relative px-10 flex-row gap-4  md:flex-col">
                     {
-                        kurtasCollection.map((item) => {
+                        kurtasCollection.map((item,i) => {
                             if (kurtas === true) {
-                                return <>
+                                return <div key={item.id+i}>
                                     <Link to={"/women/" + item.id} >
-                                        <div className=" relative min-w-[16rem] bg-cover h-80 " style={{ backgroundImage: `url("${item.images1}")` }}>
+                                        <div className=" relative min-w-[16rem] bg-cover h-80 " style={{ backgroundImage: `url("${item.images1}")` }} >
                                             <div className=" flex flex-col justify-start items-start gap-2 absolute bottom-0 p-2">
                                                 <span className=" text-white [text-shadow:_0px_1px_7px_black] font-semibold text-xl">₹ {item.price}</span>
                                                 <span className="text-white font-semibold bg-[#0b0d0e2b] text-lg p-0.5 px-2 rounded-sm">{item.company}</span>
@@ -75,7 +75,7 @@ const Women=()=>{
                                             </div>
                                         </div>
                                     </Link>
-                                </>
+                                </div>
                             }else{
                                 return<></>
                             }
@@ -97,7 +97,7 @@ const Women=()=>{
                     {
                         jacketCollection.map((item) => {
                             if (jacket === true) {
-                                return <>
+                                return <div key={item.id}>
                                     <Link to={"/women/" + item.id} >
                                         <div className=" relative min-w-[16rem] bg-cover h-80 " style={{ backgroundImage: `url("${item.images1}")` }} >
                                             <div className=" flex flex-col justify-start items-start gap-2 absolute bottom-0 p-2">
@@ -107,7 +107,7 @@ const Women=()=>{
                                             </div>
                                         </div>
                                     </Link>
-                                </>
+                                </div>
                             }else{
                                 return<></>
                             }

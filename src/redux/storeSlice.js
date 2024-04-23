@@ -23,6 +23,15 @@ export const storeSlice = createSlice({
             
             state.user= [...action.payload]
         },
+        updateUserInfo : (state,action) =>{
+            let keys= Object.keys(action.payload);
+            let values= Object.values(action.payload);
+            if(keys.length===values.length){
+                keys.forEach((key,i)=>{
+                    state.user[0][key.toString()]=values[i];
+                })
+            }
+        },
         addToCart : (state,action) =>{
             state.user[0].cart= [...action.payload]
         },
@@ -47,5 +56,5 @@ export const storeSlice = createSlice({
     }
 })
 
-export const { addMenProduct , addWomenProduct, addUser ,addToCart, addToOrder, setOrderList,setChecked,setLogout,addToWishList} = storeSlice.actions
+export const { addMenProduct , addWomenProduct, addUser ,addToCart, addToOrder, setOrderList,setChecked,setLogout,addToWishList, updateUserInfo} = storeSlice.actions
 export default storeSlice.reducer

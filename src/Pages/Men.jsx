@@ -57,12 +57,12 @@ const Men = () => {
                     : <></>
             }
             <Filter products={men_product} setShirt={setShirt} setTshirt={setTshirt} shirt={shirt} tshirt={tshirt} setShirtCollection={setShirtCollection} setTshirtCollection={setTshirtCollection} shirtCollection={shirtCollection} tshirtCollection={tshirtCollection}/>
-            <div className="w-full relative">
-                <div className="flex min-w-full justify-between  overflow-y-hidden relative px-10 flex-row gap-4 md:flex-col">
+            <div className="w-full relative" >
+                <div className="flex min-w-full justify-between  overflow-y-hidden relative px-10 flex-row gap-4 md:flex-col" >
                     {
                         tshirtCollection.map((item) => {
                             if (tshirt === true) {
-                                return <>
+                                return <div key={item.id}>
                                     <Link to={"/"+item.gender+"/" + item.id} >
                                         <div className=" relative min-w-[16rem] bg-cover h-80 " style={{ backgroundImage: `url("${item.images1}")` }}>
                                             <div className=" flex flex-col justify-start items-start gap-2 absolute bottom-0 p-2">
@@ -72,7 +72,7 @@ const Men = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                </>
+                                </div>
                             }else{
                                 return <></>
                             }
@@ -94,7 +94,7 @@ const Men = () => {
                     {
                         shirtCollection.map((item) => {
                             if (shirt === true) {
-                                return <>
+                                return <div key={item.id}>
                                     <Link to={"/"+item.gender+"/" + item.id} >
                                         <div className=" relative min-w-[16rem] bg-cover h-80 " style={{ backgroundImage: `url("${item.images1}")` }} >
                                             <div className=" flex flex-col justify-start items-start gap-2 absolute bottom-0 p-2">
@@ -104,7 +104,7 @@ const Men = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                </>
+                                </div>
                             }else{
                                 return <></>
                             }

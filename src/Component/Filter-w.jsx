@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const FilterW = (props) => {
     const {products, setkurtas, setjacket , setkurtasCollection , setjacketCollection , kurtasCollection, jacketCollection}=props;
-    const [show,setShow]=useState(false);
+    const [showFilterW,setshowFilterW]=useState(false);
     const [kurtas,setFilterKurtas]=useState(false);
     const [jackets,setFilterJackets]=useState(false);
     const filter = useRef();
@@ -13,7 +13,8 @@ const FilterW = (props) => {
 
 
     useEffect(()=>{
-        if(show){
+        if(showFilterW){
+            if(filter.current){
                 filter.current.style.width="12rem";
                 setTimeout(()=>{
                 if(window.innerHeight<430){
@@ -23,15 +24,20 @@ const FilterW = (props) => {
                 }
                 filter.current.style.overflow="hidden auto";
                 },500)
+            }
             
         }else{
+           if(filter.current){
             filter.current.style.height="3rem";
             setTimeout(()=>{
-            filter.current.style.width="2.65rem";
-            filter.current.style.overflow="hidden";
+                if(filter.current){
+                    filter.current.style.width="2.65rem";
+                    filter.current.style.overflow="hidden";
+                    }
             },500)
+           }
         }
-    },[show,filter])
+    },[showFilterW,filter])
 
     useEffect(()=>{
         let array=[];
@@ -131,10 +137,10 @@ const FilterW = (props) => {
     return <>
         <div ref={filter} className={"flex flex-col fixed top-28 right-0 bg-white shadow-sm shadow-slate-400 z-10 overflow-x-hidden w-11 p-4 rounded-md rounded-tr-none rounded-br-none transition-all duration-500"}>
             <div className="flex flex-row justify-between items-center gap-2 ">
-            <span className="pb-2 font-semibold" onClick={()=>{setShow(!show)}}>
+            <span className="pb-2 font-semibold" onClick={()=>{setshowFilterW(!showFilterW)}}>
                 <span><i className="fi fi-rr-filter"></i></span>
             </span>
-            <span onClick={()=>{setShow(!show)}}><i className="fi fi-rr-angle-small-down cursor-pointer"></i></span>
+            <span onClick={()=>{setshowFilterW(!showFilterW)}}><i className="fi fi-rr-angle-small-down cursor-pointer"></i></span>
             </div>
             <hr />
             {/* Sorting price low to high */}
@@ -142,11 +148,11 @@ const FilterW = (props) => {
                 <span className="font-semibold">Sort By</span>
                 <span className="flex flex-col justify-start gap-4 text-xs">
                     <span className="flex flex-row justify-start gap-2 items-center">
-                        <input type="checkbox" checked={price_l_to_h} onClick={e=>sort_by_price_l_h(e,"l_to_h")}/>
+                        <input type="checkbox" defaultChecked={price_l_to_h} onClick={e=>sort_by_price_l_h(e,"l_to_h")}/>
                         <span>Price low to high</span>
                     </span>
                     <span className="flex flex-row justify-start gap-2 items-center">
-                        <input type="checkbox" checked={price_h_to_l} onClick={e=>sort_by_price_l_h(e,"h_to_l")}/>
+                        <input type="checkbox" defaultChecked={price_h_to_l} onClick={e=>sort_by_price_l_h(e,"h_to_l")}/>
                         <span>Price high to low</span>
                     </span>
                 </span>
@@ -170,8 +176,8 @@ const FilterW = (props) => {
                 <div className="flex flex-col gap-2 mb-4 text-sm">
                 <span className="font-semibold">Brands</span>
                 <span className="flex flex-col justify-start gap-4 text-xs">
-                    {brands.map(item=>{
-                        return <span className="flex flex-row justify-start gap-2 items-center">
+                    {brands.map((item,i)=>{
+                        return <span className="flex flex-row justify-start gap-2 items-center" key={i+item.brand}>
                         <input type="checkbox" onClick={(e)=>{sort_by_brand(e,item.brand)}}/>
                         <span>{item.brand} ( {item.no}  )</span>
                     </span>

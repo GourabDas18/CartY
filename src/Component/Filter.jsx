@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 
 const Filter = (props) => {
     const {products, setShirt, setTshirt , setShirtCollection , setTshirtCollection , shirtCollection, tshirtCollection}=props;
-    const [show,setShow]=useState(false);
+    const [showFilterM,setshowFilterM]=useState(false);
     const [shirt,setFilterShirt]=useState(false);
     const [tshirt,setFilterTshirt]=useState(false);
-    const filter = useRef();
+    const filterM = useRef();
     const [brands,setBrands]=useState([]);
     const [price_l_to_h,setPrice_l_to_h]=useState(false);
     const [price_h_to_l,setPrice_h_to_l]=useState(false);
@@ -14,25 +14,30 @@ const Filter = (props) => {
 
 
     useEffect(()=>{
-        if(show){
-            filter.current.style.width="12rem";
-            setTimeout(()=>{
-            if(window.innerHeight<430){
-                filter.current.style.height="250px"; 
-            }else{
-                filter.current.style.height="30rem";
+        if(showFilterM){
+            if(filterM.current){
+                filterM.current.style.width="12rem";
+                setTimeout(()=>{
+                if(window.innerHeight<430){
+                    filterM.current.style.height="250px"; 
+                }else{
+                    filterM.current.style.height="30rem";
+                }
+                filterM.current.style.overflow="hidden auto";
+                },500)
             }
-            filter.current.style.overflow="hidden auto";
-            },500)
-            
         }else{
-            filter.current.style.height="3rem";
-            setTimeout(()=>{
-            filter.current.style.width="2.65rem";
-            filter.current.style.overflow="hidden";
-            },500)
+            if(filterM.current){
+                filterM.current.style.height="3rem";
+                setTimeout(()=>{
+                if(filterM.current){
+                filterM.current.style.width="2.65rem";
+                filterM.current.style.overflow="hidden";
+                }
+                },500)
+            }
         }
-    },[show,filter])
+    },[showFilterM])
 
     useEffect(()=>{
         let array=[];
@@ -68,15 +73,15 @@ const Filter = (props) => {
         if(type==="l_to_h"){
             setPrice_h_to_l(false);
             setPrice_l_to_h(true);
-            var filteredproductListshirt = shirtCollection.filter(item=>item.type==="shirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
-            var filteredproductListtshirt = tshirtCollection.filter(item=>item.type==="tshirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
+            var filteredproductListshirt = shirtCollection.filterM(item=>item.type==="shirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
+            var filteredproductListtshirt = tshirtCollection.filterM(item=>item.type==="tshirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
             setShirtCollection(filteredproductListshirt);
             setTshirtCollection(filteredproductListtshirt);
         }else{
             setPrice_l_to_h(false);
             setPrice_h_to_l(true);
-            var filteredproductListshirt = shirtCollection.filter(item=>item.type==="shirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
-            var filteredproductListtshirt = tshirtCollection.filter(item=>item.type==="tshirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
+            var filteredproductListshirt = shirtCollection.filterM(item=>item.type==="shirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
+            var filteredproductListtshirt = tshirtCollection.filterM(item=>item.type==="tshirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
             setShirtCollection(filteredproductListshirt);
             setTshirtCollection(filteredproductListtshirt);
         }
@@ -94,34 +99,34 @@ const Filter = (props) => {
             }
         }else{
             newBrandList=[...bransList];
-            newBrandList= newBrandList.filter(item=>item!==brand);
+            newBrandList= newBrandList.filterM(item=>item!==brand);
             setBrandlist(newBrandList);
         }
         if(newBrandList.length>0){
             newBrandList.forEach(brand_name=>{
             
-                products.filter(item=>item.type==="shirt"&&item.company===brand_name).forEach(filtered_item=>{
+                products.filterM(item=>item.type==="shirt"&&item.company===brand_name).forEach(filtered_item=>{
                     newShirtList.push(filtered_item);
                 })
-                products.filter(item=>item.type==="tshirt"&&item.company===brand_name).forEach(filtered_item=>{
+                products.filterM(item=>item.type==="tshirt"&&item.company===brand_name).forEach(filtered_item=>{
                     newTshirtList.push(filtered_item);
                 })
             })
         }else{
-            newShirtList = products.filter(item=>item.type==="shirt");
-            newTshirtList = products.filter(item=>item.type==="tshirt");
+            newShirtList = products.filterM(item=>item.type==="shirt");
+            newTshirtList = products.filterM(item=>item.type==="tshirt");
         }
 
 
         if(price_l_to_h){
-            var filteredproductListshirt = newShirtList.filter(item=>item.type==="shirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
-            var filteredproductListtshirt = newTshirtList.filter(item=>item.type==="tshirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
+            var filteredproductListshirt = newShirtList.filterM(item=>item.type==="shirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
+            var filteredproductListtshirt = newTshirtList.filterM(item=>item.type==="tshirt").sort((a,b)=>parseInt(a.price)-parseInt(b.price)) ;
             setShirtCollection(filteredproductListshirt);
             setTshirtCollection(filteredproductListtshirt);
         }
         else if(price_h_to_l){
-            var filteredproductListshirt = newShirtList.filter(item=>item.type==="shirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
-            var filteredproductListtshirt = newTshirtList.filter(item=>item.type==="tshirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
+            var filteredproductListshirt = newShirtList.filterM(item=>item.type==="shirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
+            var filteredproductListtshirt = newTshirtList.filterM(item=>item.type==="tshirt").sort((a,b)=>parseInt(b.price)-parseInt(a.price)) ;
             setShirtCollection(filteredproductListshirt);
             setTshirtCollection(filteredproductListtshirt);
         }else{
@@ -131,12 +136,12 @@ const Filter = (props) => {
 
     }
     return <>
-        <div ref={filter} className={"flex flex-col fixed top-28 right-0 bg-white shadow-sm shadow-slate-400 z-10 overflow-x-hidden w-11 p-4 rounded-md rounded-tr-none rounded-br-none transition-all duration-500 "}>
+        <div ref={filterM} className={"flex flex-col fixed top-28 right-0 bg-white shadow-sm shadow-slate-400 z-10 overflow-x-hidden w-11 p-4 rounded-md rounded-tr-none rounded-br-none transition-all duration-500 "}>
             <div className="flex flex-row justify-between items-center gap-2 ">
             <span className="pb-2 font-semibold">
-            <span onClick={()=>{setShow(!show)}}><i className="fi fi-rr-filter"></i></span>
+            <span onClick={()=>{setshowFilterM(!showFilterM)}}><i className="fi fi-rr-filter"></i></span>
             </span>
-            <span onClick={()=>{setShow(!show)}}><i className="fi fi-rr-angle-small-down cursor-pointer"></i></span>
+            <span onClick={()=>{setshowFilterM(!showFilterM)}}><i className="fi fi-rr-angle-small-down cursor-pointer"></i></span>
             </div>
             <hr />
             {/* Sorting price low to high */}
@@ -144,11 +149,11 @@ const Filter = (props) => {
                 <span className="font-semibold">Sort By</span>
                 <span className="flex flex-col justify-start gap-4 text-xs">
                     <span className="flex flex-row justify-start gap-2 items-center">
-                        <input type="checkbox" checked={price_l_to_h} onClick={e=>sort_by_price_l_h(e,"l_to_h")}/>
+                        <input type="checkbox" defaultChecked={price_l_to_h} onClick={e=>sort_by_price_l_h(e,"l_to_h")}/>
                         <span>Price low to high</span>
                     </span>
                     <span className="flex flex-row justify-start gap-2 items-center">
-                        <input type="checkbox" checked={price_h_to_l} onClick={e=>sort_by_price_l_h(e,"h_to_l")}/>
+                        <input type="checkbox" defaultChecked={price_h_to_l} onClick={e=>sort_by_price_l_h(e,"h_to_l")}/>
                         <span>Price high to low</span>
                     </span>
                 </span>
@@ -172,8 +177,8 @@ const Filter = (props) => {
                 <div className="flex flex-col gap-2 mb-4 text-sm">
                 <span className="font-semibold">Brands</span>
                 <span className="flex flex-col justify-start gap-4 text-xs">
-                    {brands.map(item=>{
-                        return <span className="flex flex-row justify-start gap-2 items-center">
+                    {brands.map((item,i)=>{
+                        return <span className="flex flex-row justify-start gap-2 items-center" key={i+item.brand}>
                         <input type="checkbox" onClick={(e)=>{sort_by_brand(e,item.brand)}}/>
                         <span>{item.brand} ( {item.no}  )</span>
                     </span>

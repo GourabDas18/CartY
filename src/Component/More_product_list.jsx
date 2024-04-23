@@ -26,7 +26,7 @@ const More_product_list=(props)=>{
         {
             shuffle(props.item_List.filter(item=>item.id!==props.selected_item[0]?.id)).map((item,i)=>{
                 if(i<5){
-                    return <>
+                    return <div key={i+item.name}>
                     <Link to={"/"+item.gender+"/"+item.id} >
                     <div className=" relative min-w-[14rem] bg-cover h-72 " style={{backgroundImage: `url("${item.images1}")`}} >
                         <div className=" flex flex-col justify-start items-start gap-2 absolute bottom-0 p-2">
@@ -35,7 +35,7 @@ const More_product_list=(props)=>{
                         </div>
                     </div>
                     </Link>
-                    </>
+                    </div>
                 }
             })
         }

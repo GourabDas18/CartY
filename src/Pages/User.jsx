@@ -7,9 +7,10 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogout } from "../redux/storeSlice";
+import { setLogout, updateUserInfo } from "../redux/storeSlice";
 import Loading from "../Component/Loading";
 import Footer from "../Component/Footer";
+import Alert from "../Component/Alert";
 
 const User = () => {
     const [user,setUser]=useState(store.getState().storeSlice?.user);
@@ -24,8 +25,19 @@ const User = () => {
     const [country, setCountry] = useState("");
     const [textEditable, setTextEditable] = useState(false);
     const [loading,setLoading]=useState(true);
+    const[alert,setAlert]=useState(false);
+    const[alertData,setAlertData]=useState(null);
     const dispatch = useDispatch();
     const userAuthcheckingDone = useSelector(state=>state.storeSlice.checked);
+    const alertBoxSet=(details,callBack)=>{
+        setAlertData(details);
+        setAlert(true);
+        setTimeout(()=>{
+            setAlert(false);
+            setAlertData(null);
+            callBack();
+        },details.time||1200)
+    }
     useEffect(() => {
         if (userAuthcheckingDone) {
             setLoading(false);
@@ -48,7 +60,7 @@ const User = () => {
     }, [user])
 
     const updateInfo = () => {
-        updateDoc(doc(db, "users", user[0].uid), {
+        const data = {
             name: fname + " " + lname,
             phone_number: phone,
             email: mail,
@@ -56,8 +68,10 @@ const User = () => {
             state: state,
             pincode: pincode,
             country: country
-        }).then(val => {
-            alert("update succesfull");
+        }
+        updateDoc(doc(db, "users", user[0].uid),data).then(val => {
+            dispatch(updateUserInfo(data));
+            alertBoxSet({data:"Update successful",font:"text-green-100" ,color:"bg-green-500"},()=>{})
             setTextEditable(false);
         }).catch(error => {
             console.log(error)
@@ -72,12 +86,13 @@ const User = () => {
             });
             setUser([]);
             setTotalcartItems("");
-            alert("Signed out Successfully");
+            alertBoxSet({data:"Signed out Successfully",font:"text-slate-100" ,color:"bg-slate-800"},()=>{})
         }
     }
 
 
     return <div className="relative min-h-screen pb-64">
+                {alert? <Alert message={alertData.data} font={alertData.font} color={alertData.color} /> : ""}
         <Header page={"User"} totalcartItems={totalcartItems}/>
         {loading?<Loading/>:<></>}
         {user.length > 0 && !loading ?

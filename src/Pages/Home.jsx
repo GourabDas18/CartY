@@ -89,7 +89,7 @@ const Home =()=>{
             <hr />
             <span className=" flex flex-row justify-around w-full my-6 md:w-[95%] md:overflow-scroll md:justify-normal md:gap-14 md:p-10">
             {discountProduct(70).map((item,i)=>{
-                return <span className=" border-4 border-rose-300 relative" key={i}>
+                return <span className=" border-4 border-rose-300 relative" key={i+70}>
                     <span className="absolute flex z-10 -top-2 -left-10 p-2 bg-rose-600 rounded-md text-rose-100 -rotate-45">{parseInt(item.discount)}% off</span>
                     <ItemCard item={item.item}/></span>
             })}
@@ -103,10 +103,10 @@ const Home =()=>{
                 </span>
                 <div className="flex flex-row justify-around w-full my-10 md:justify-normal md:gap-10 md:flex-col md:px-5">
                 {mens_product.filter(item=>item.type==="shirt").map((item,i)=>{
-                    return i<4 ? <span key={i} className="  shadow-xl shadow-orange-100">
+                    return i<4 ? <span key={i+item.type} className="  shadow-xl shadow-orange-100">
                     <ItemCard item={item} />
                     </span>
-                    :<></>
+                    :<div key={i}></div>
                 })}
                 </div>
             </div>            
@@ -116,10 +116,10 @@ const Home =()=>{
             <hr />
             <span className=" flex flex-row justify-around w-full my-6 md:w-[95%] md:overflow-scroll md:justify-normal md:gap-14 md:p-10">
             {discountProduct(50).map((item,i)=>{
-                return i<4 ?<span className=" border-4 border-rose-300 relative" key={i}>
+                return i<4 ?<span className=" border-4 border-rose-300 relative" key={i+50}>
                     <span className="absolute flex z-10 -top-2 -left-10 p-2 bg-rose-600 rounded-md text-rose-100 -rotate-45">{parseInt(item.discount)}% off</span>
                     <ItemCard item={item.item}/></span>
-                    :<></>
+                    :<div key={i+50}></div>
             })}
             </span>
             </div>
@@ -131,10 +131,10 @@ const Home =()=>{
                 </span>
                 <div className="flex flex-row justify-around w-full my-10 md:flex-col md:gap-10 md:px-5">
                 {women_product.filter(item=>item.type==="kurtas").map((item,i)=>{
-                    return i<4 ? <span key={i} className="  shadow-xl shadow-orange-100">
+                    return i<4 ? <span key={i+item.type} className="  shadow-xl shadow-orange-100">
                     <ItemCard item={item} />
                     </span>
-                    :<></>
+                    :<div key={i+item.type}></div>
                 })}
                 </div>
             </div>
